@@ -8,10 +8,9 @@ public class Main {
     int Num=0;
 
     String[] parts = bufferedReader.readLine().split(" ");
-    String N = parts[0];
-    String bb = parts[1];
 
-    int B = Integer.parseInt(bb);
+    String N = parts[0];
+    int B = Integer.parseInt(parts[1]);
 
     char[] c = N.toCharArray();
 
