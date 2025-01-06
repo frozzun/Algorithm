@@ -25,7 +25,7 @@ public class Main {
 
     // arrInt[] 를 정렬하기 위해
     // counting[] 를 생성 후 누적시킴
-    int[] counting = new int[11];
+    int[] counting = new int[10];
     for (int i = 0; i < arrInt.length; i++) {
       counting[arrInt[i]]++;
     }
