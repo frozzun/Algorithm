@@ -16,9 +16,9 @@ class Solution {
             hash.replace(people, hash.get(people)-1);
         }
         
-        for(String people : participant) {
-            if(hash.get(people)!=0) {
-                answer = people;
+        for(String key : hash.keySet()) {
+            if(hash.get(key)!=0) {
+                answer = key;
                 break;
             }
         }
