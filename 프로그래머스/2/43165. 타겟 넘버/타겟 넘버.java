@@ -1,20 +1,25 @@
+import java.util.*;
+
 class Solution {
     static int answer = 0;
     public int solution(int[] numbers, int target) {
-        
+                 
         dfs(numbers, target, 0, 0);
-        
         return answer;
     }
-    static void dfs(int[] numbers, int target, int depth, int sum) {
-        
-        if(depth == numbers.length) {
-            if(sum == target) {
+    
+    public void dfs(int[] numbers, int target, int depth, int temp) {
+        // 만족, 종료 조건 설정
+        if(depth == numbers.length-1) {
+            if(temp + numbers[depth] == target || temp - numbers[depth] == target) {
                 answer ++;
+                return ;
             }
-            return;
+            else return ;
         }
-        dfs(numbers, target, depth + 1, sum + numbers[depth]);
-        dfs(numbers, target, depth + 1, sum - numbers[depth]);
+        else {
+            dfs(numbers, target, depth+1, temp + numbers[depth]);
+            dfs(numbers, target, depth+1, temp - numbers[depth]);
+        }
     }
 }
