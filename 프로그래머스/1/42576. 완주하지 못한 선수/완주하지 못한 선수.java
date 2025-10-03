@@ -1,27 +1,36 @@
-import java.util.HashMap;
+import java.util.*;
 
 class Solution {
     public String solution(String[] participant, String[] completion) {
-        String answer = " ";
+        HashMap<String, Integer> map = new HashMap<>();
+        String answer = "";
         
-        //HashMap에서 key는 선수 이름, value 는 동명 이인 때문에 사람 수
-        HashMap<String, Integer> hash = new HashMap<String, Integer>();
-        
-        //HashMap에 저장.
-        for(String people : participant) {
-            hash.put(people, hash.getOrDefault(people, 0) +1);
+        // 참가자 map에 넣기.
+        for(String name : completion) {
+            if(!map.containsKey(name)) {
+                map.put(name, 1);
+            } else {
+                int value = map.get(name);
+                map.put(name, ++value);
+            }
+            
         }
         
-        for(String people : completion) {
-            hash.replace(people, hash.get(people)-1);
-        }
-        
-        for(String key : hash.keySet()) {
-            if(hash.get(key)!=0) {
-                answer = key;
-                break;
+        // 완주자 명단 갖고 놀기
+        for(String name : participant) {
+            if(map.containsKey(name) && map.get(name)==1) {
+                map.remove(name);
+            } else if(map.containsKey(name) && map.get(name)!=1) {
+                int value = map.get(name);
+                map.put(name, --value);
+            } else if(!map.containsKey(name)) {
+                answer = name;
             }
         }
+        
+        
+        
+        
         return answer;
     }
 }
