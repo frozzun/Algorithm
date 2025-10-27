@@ -1,44 +1,54 @@
 import java.util.*;
 
 class Solution {
-    static int[] dx = {1, -1, 0, 0};
-    static int[] dy = {0, 0, 1, -1};
+    private static final int[] dc = {1, -1, 0, 0};
+    private static final int[] dr = {0, 0, 1, -1};
+    static int MAX_SIZE_C;
+    static int MAX_SIZE_R;
+    static boolean[][] visited;
+    static int[] target;
     
     public int solution(int[][] maps) {
-        int n = maps.length;
-        int m = maps[0].length;
-        int[][] visited = new int[n][m];
-
-        bfs(maps, visited);
+        MAX_SIZE_C = maps.length;
+        MAX_SIZE_R = maps[0].length;
+        visited = new boolean[maps.length][maps[0].length];
+        target = new int[]{MAX_SIZE_C-1, MAX_SIZE_R-1};
         
-        return visited[n - 1][m - 1] == 0 ? -1 : visited[n - 1][m - 1];
+        return bfs(0, 0, maps);
     }
     
-    static void bfs(int[][] maps, int[][] visited) {
-        Queue<int[]> queue = new LinkedList<>();
-        queue.offer(new int[]{0, 0});
-        visited[0][0] = 1;
+    static int bfs(int cC, int cR, int[][] maps) {
+        ArrayDeque<int[]> queue = new ArrayDeque<>();
         
-        while (!queue.isEmpty()) {
-            int[] current = queue.poll();
-            int cx = current[0];
-            int cy = current[1];
+        // 방문 처리, { 행(row), 열(column), 거리}
+        visited[cC][cR] = true;
+        queue.add(new int[]{cC, cR, 1});
+        
+        while(!queue.isEmpty()) {
             
-            for (int i = 0; i < 4; i++) {
-                int nx = cx + dx[i];
-                int ny = cy + dy[i];
+            int[] current = queue.poll();
+            // 종료 조건
+            if(current[0]==target[0] && current[1]==target[1]) return current[2];
+            
+            for(int i=0;i<4;i++) {
+                int nc = current[0] + dc[i];
+                int nr = current[1] + dr[i];
+                int dist = current[2] + 1;
                 
-                // 맵 범위를 벗어나지 않도록 수정
-                if (nx < 0 || nx >= maps.length || ny < 0 || ny >= maps[0].length) {
-                    continue;
-                }
+                // map 밖으로 가는 경우
+                if(nc > MAX_SIZE_C-1 || nc < 0 || nr > MAX_SIZE_R-1 || nr < 0) continue;
+                // 벽으로 가는 경우
+                if(maps[nc][nr]==0) continue;
                 
-                // 방문하지 않았고, 벽이 아닐 경우만 이동
-                if (visited[nx][ny] == 0 && maps[nx][ny] == 1) {
-                    visited[nx][ny] = visited[cx][cy] + 1;
-                    queue.offer(new int[]{nx, ny});
-                }
+                // 이미 방문
+                if(visited[nc][nr]) continue;
+                
+                visited[nc][nr] = true;
+                queue.add(new int[]{nc, nr, dist});
             }
+            
         }
+        
+        return -1;
     }
 }
