@@ -1,42 +1,44 @@
 import java.util.*;
 
-// 컴퓨터의 개수 n, 
-// 연결에 대한 정보가 담긴 2차원 배열 computers가 매개변수로 주어질 때, 
-// 네트워크의 개수를 return
 class Solution {
-    static boolean[] visited;
-    static int answer = 0;
+    public static boolean[] visited;
+    public static int answer;
     
     public int solution(int n, int[][] computers) {
+        // 순환 함수 찾기?
+        // computers[i][j] = 1 : i번 컴퓨터와 j번 컴퓨터가 연결돼있음
+        // bfs 해서 node 기억, answer ++;
+        // node 연결 안된거 다시 bfs
         visited = new boolean[n];
+        answer = 0;
         
         for(int i=0;i<n;i++) {
-            if (!visited[i]) {  // 방문하지 않은 노드에서 새로운 네트워크 탐색 시작
-                answer++;       // 새로운 네트워크 발견
-                dfs(computers, i);
-            }
+            if(!visited[i]) bfs(i, computers);
         }
-
+        
         return answer;
     }
     
-    static void dfs(int[][] computers, int startNode) {
-        if(visited[startNode])  return ;
+    public static void bfs(int start, int[][] computers) {
+        ArrayDeque<Integer> dq = new ArrayDeque<>();
         
-        // 방문처리
-        visited[startNode] = true;
+        visited[start] = true;
+        dq.add(start);
         
-        for (int i = 0; i < computers.length; i++) { // i = 0부터 시작해야 모든 노드 탐색 가능
-            if (canConnect(computers, startNode, i)) {
-                dfs(computers, i);
-            }
-        }
-    }
-    
-    
-    static boolean canConnect(int[][] computers, int nodeA, int nodeB) {
-        //방문한적 없고, 연결이 되어있을 때
-        if(!visited[nodeB] && computers[nodeA][nodeB] == 1) return true;
-        return false;
-    }
+        while(!dq.isEmpty()) {
+            int current = dq.poll();
+            
+            for(int i=0;i<computers[current].length;i++) {
+                if(i!=current) {
+                    if(computers[current][i]==1 && !visited[i]) {  // 연결 돼있음
+                        visited[i]=true;
+                        dq.add(i);
+                    }
+                }
+            }   //for
+            
+        }   // while
+        answer ++;
+        
+    }   // bfs
 }
