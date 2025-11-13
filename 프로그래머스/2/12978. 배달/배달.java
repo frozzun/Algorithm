@@ -38,12 +38,14 @@ class Solution {
         
         while(!pq.isEmpty()) {
             Node current = pq.poll();
+            if(dist[current.idx] > K) continue;
             
             if(dist[current.idx] < current.weight) continue;
             
             // adjList[current] 연결된거 순회
             for(Node next : adjList[current.idx]) {
                 if(dist[next.idx] > current.weight + next.weight) {
+                    
                     // dist 갱신
                     dist[next.idx] = current.weight + next.weight;
                     
